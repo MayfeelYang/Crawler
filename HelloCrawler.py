@@ -11,7 +11,7 @@ def getHtml(url):
 
 
 def getImg(html):
-    reg = r'src="(.+?\.jpg)" '
+    reg = r'href="(.+?\.png)">'
     imgRe = re.compile(reg)
     imgList = re.findall(imgRe, html)
     count = 0
@@ -39,7 +39,8 @@ def getHtmls(urlPrefix, startID):
 if __name__ == "__main__":
     #------------下面是爬取1个指定页面--------------
     try:
-        html = getHtml("http://tieba.baidu.com/p/2460150890")
+        #html = getHtml("http://tieba.baidu.com/p/2460150890")
+        html = getHtml("http://index.baidu.com/?tpl=trend&word=%CB%CE%D6%D9%BB%F9")
         #print html
         #下面是获取html中的图片的链接，并下载图片
         getImg(html)
