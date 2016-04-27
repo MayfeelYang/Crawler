@@ -4,18 +4,13 @@
 #
 # See documentation in:
 # http://doc.scrapy.org/en/latest/topics/items.html
-
 from scrapy import Item, Field
 
 
-class ToutiaocrawlerItem(Item):
+class JdpriceItem(Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    tag = Field()
-    title = Field()
-    url = Field()
-    datetime = Field()
-    content = Field()
-    comments = Field()
-    id = Field()
+    productName = Field()
+    productPrice = Field()
+    productTag = Field()
     pass

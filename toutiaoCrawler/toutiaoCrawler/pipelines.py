@@ -17,6 +17,7 @@ from datetime import datetime
 from hashlib import md5
 import MySQLdb
 import MySQLdb.cursors
+import datetime
 
 class ToutiaocrawlerPipeline2(object):
     def process_item(self, item, spider):
@@ -42,7 +43,9 @@ class ToutiaocrawlerPipeline(object):
 
     def process_item(self, item, spider):
         print "@@@@@@@@@@@"
+        #print len(item['comments'])
         query = self.dbpool.runInteraction(self._insert, item, spider)
+
         #query.addErrback(self._handle_error, item, spider)
         return item
 
@@ -75,9 +78,16 @@ class ToutiaocrawlerPipeline(object):
             insert into TouTiao (title, tag, datetime, url, content)
             values(%s, %s, %s, %s, %s)
             """, (item['title'].encode('utf-8'), item['tag'], item['datetime'], item['url'], item['content'].encode("utf-8")))
-        print type(item['title'].encode('utf-8')), "((((((((((((((((((((("
         #log.msg("Item stored in db", level=log.DEBUG)
+        for comment in item['comments']:
 
+            timeStamp = int(comment['create_time'])
+            dateArray = datetime.datetime.utcfromtimestamp(timeStamp)
+            otherStyleTime = dateArray.strftime("%Y-%m-%d %H:%M:%S")
+            conn.execute("""
+            insert into TouTiao_comment (news_id, user_id, user_name, create_time, text)
+            values(%s, %s, %s, %s, %s)
+            """, (item['id'], comment['user_id'], comment['user_name'].encode("utf-8"), otherStyleTime, comment['text'].encode("utf-8")))
 
     #获取url的md5编码
     def _get_linkmd5id(self, item):
